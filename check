@@ -1,0 +1,17 @@
+#!/usr/bin/expect
+set email [lindex $argv 0]
+spawn telnet gmail-smtp-in.l.google.com 25
+expect "Connected"
+send "HELO hi\r"
+expect "at your service"
+send "MAIL FROM: <webneat@gmail.com>\r"
+expect "OK"
+send "RCPT TO: <$email>\r"
+expect {
+   "550" {
+      error "Not exist"
+   }
+}
+expect "OK"
+send "quit\r"
+expect "closed"
